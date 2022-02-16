@@ -13,7 +13,7 @@ def hash_string(string):
     return hashlib.sha256(string.encode("utf-8")).hexdigest()
 
 
-def gen_nonce(length):
+def generate_nonce(length):
     """
     Generates a random string of bytes, base64 encoded
     """
@@ -30,7 +30,7 @@ def gen_nonce(length):
 
 
 def find_hash(text):
-    random_string = gen_nonce(100)
+    random_string = generate_nonce(100)
     sha256 = hash_string(text + random_string)
     return sha256, random_string, len(random_string)
 
