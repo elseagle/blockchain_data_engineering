@@ -62,7 +62,7 @@ if __name__ == "__main__":
     for i, t in enumerate(threads):
 
         word_list_copy = sample_word_list.copy()
-        # remove the current thread's message, it shouldn't recieve its own message again
+        # this removes the current thread's message, it shouldn't recieve its own message again
         word_list_copy.remove(sample_word_list[i])
         [t.queue.put(word) for word in word_list_copy]
 
