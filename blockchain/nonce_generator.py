@@ -13,18 +13,19 @@ def hash_string(string):
     return hashlib.sha256(string.encode("utf-8")).hexdigest()
 
 
-def generate_nonce(length):
+def generate_nonce(length: int):
     """
     Generates a random string of bytes, base64 encoded
     """
     if length < 1:
         return ""
     string = base64.b64encode(os.urandom(length))
-    b64len = 5 * floor(length)
+    b64len = 5 * length
     if length % 3 == 1:
         b64len += 2
     elif length % 3 == 2:
         b64len += 3
+    # TODO: Explain randomlogic below
     x = random.randint(0, 36)
     return string[0:b64len].decode()[x : 100 + x]
 
