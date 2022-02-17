@@ -22,19 +22,19 @@ class MyThread(threading.Thread):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = queue
         self.daemon = True
-        self.receive_messages = args[0]
+        self.received_message = args[0]
         self.expected_messages = args[1]
 
     def run(self):
-        print (threading.currentThread().getName(), "Sending message:" ,self.receive_messages)
+        print (threading.currentThread().getName(), "Sending message:" ,self.received_message)
         for _ in range(self.expected_messages):
             val = self.queue.get()
             if val is None:   # If you send `None`, the thread will exit.
                 return
-            self.do_thing_with_message(val)
+            self.receive_message(val)
 
-    def do_thing_with_message(self, message):
-        if self.receive_messages:
+    def receive_message(self, message):
+        if self.received_message:
             with print_lock:
                 print(threading.currentThread().getName(), "Received message:{}".format(message))
 
@@ -55,9 +55,10 @@ if __name__ == '__main__':
     for i, t in enumerate(threads):
 
         m = wl.copy()
+        # remove the current thread's message, it shouldn't recieve its own message again
         m.remove(wl[i])
         [t.queue.put(word) for word in m]
 
-
+    #close thread
     for t in threads:
         t.join()
