@@ -123,15 +123,7 @@ def verify_chain(chain_):
 
 if __name__ == "__main__":
     chain = yield_nonce_and_hash()
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    mine_the_next_block(chain)
-    block_chain = mine_the_next_block(chain)
+    for _ in range(10):
+        block_chain = mine_the_next_block(chain)
     block_chain = list(block_chain)
     verify_chain(block_chain)
