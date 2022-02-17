@@ -111,7 +111,6 @@ def verify_chain(chain_):
         else:
             hash_ = hash_string(to_string(miner) + nonce + hash_)
         if hash_.startswith("0000"):
-            hash_ = hash_
             verified_count += 1
     if verified_count == len(chain_):
         print("Verification Successful")
