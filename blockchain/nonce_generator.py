@@ -37,7 +37,10 @@ def generate_nonce(length: int, length_of_padding):
     elif length % 7 == 2:
         b64len +=random.randint(10, 19)
     # TODO: Explain randomlogic below
-    output = string_[:b64len].decode()
+    
+    random_position1 = random.randint(0, 20)
+
+    output = string_[0:b64len].decode()
     if length_of_padding <=4 and length_of_padding >0:
         output = output.replace(r"+", "").replace("//", "")
 
@@ -53,11 +56,11 @@ def find_hash(text, length_of_padding=4):
 
 
 start = timer()
-count = 0
+
 while True:
 
     word = generateRandomAlphaNumericString(1) # can be replaced with any word
-    padding = "0000"
+    padding = "00000"
     x = find_hash(word, len(padding))
     if x[0].startswith(padding):
 
