@@ -50,7 +50,7 @@ if __name__ == "__main__":
     sample_word_list = []
     number_of_threads_expected = 3
     number_of_messages_per_thread = number_of_threads_expected - 1
-    for t in range(3):
+    for t in range(number_of_threads_expected):
         q = Queue()
         sample_word = generateRandomAlphaNumericString(4)
 
