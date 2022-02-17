@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import os
+from pprint import pp
 import random
 import string
 from timeit import default_timer as timer
@@ -125,4 +126,5 @@ if __name__ == "__main__":
     for _ in range(10):
         block_chain = mine_the_next_block(chain)
     block_chain = list(block_chain)
+    pp(block_chain)
     verify_chain(block_chain)
