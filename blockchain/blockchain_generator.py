@@ -37,7 +37,7 @@ def generate_nonce(length: int, length_of_padding):
         b64len += random.randint(3, 9)
     elif length % 7 == 2:
         b64len += random.randint(10, 19)
-    # TODO: Explain randomlogic below
+    # TODO: Explain random logic below
 
     output = string_[0:b64len].decode()
     if length_of_padding <= 4 and length_of_padding > 0:
@@ -107,9 +107,9 @@ def verify_chain(chain_):
         nonce = block["nonce"]
         miner = block["miner"]
         if i < 1:
-            hash_ = hash_string(str(miner) + nonce)
+            hash_ = hash_string(to_string(miner) + nonce)
         else:
-            hash_ = hash_string(str(miner) + nonce + hash_)
+            hash_ = hash_string(to_string(miner) + nonce + hash_)
         if hash_.startswith("0000"):
             hash_ = hash_
             verified_count += 1
