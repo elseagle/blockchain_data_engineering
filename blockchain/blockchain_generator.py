@@ -121,7 +121,6 @@ def verify_chain(chain_):
         return False
 
 
-# c65fe8c0b94d3b957c4dce9c4a6d7a424afc6816933d3ccf513ac74d7ead7bab
 if __name__ == "__main__":
     chain = yield_nonce_and_hash()
     mine_the_next_block(chain)
