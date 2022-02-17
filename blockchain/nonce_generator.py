@@ -37,8 +37,6 @@ def generate_nonce(length: int, length_of_padding):
     elif length % 7 == 2:
         b64len +=random.randint(10, 19)
     # TODO: Explain randomlogic below
-    
-    random_position1 = random.randint(0, 20)
 
     output = string_[0:b64len].decode()
     if length_of_padding <=4 and length_of_padding >0:
