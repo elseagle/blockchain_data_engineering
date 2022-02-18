@@ -172,9 +172,9 @@ class MyThread(threading.Thread):
                     print(name, "Block has data already")
                 break
             if len(self.blocks) != 0:
-                self.receive_message(self.miner, self.queue)
+                self.mine_next_block(self.miner, self.queue)
 
-    def receive_message(self, name_, updated_queue):
+    def mine_next_block(self, name_, updated_queue):
         if not updated_queue.empty():
 
             new_blocks = updated_queue.get()
