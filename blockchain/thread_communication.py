@@ -48,7 +48,7 @@ class MyThread(threading.Thread):
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
-    number_of_threads_expected = 4 # value can be adjusted
+    number_of_threads_expected = 4  # value can be adjusted
     number_of_messages_per_thread = number_of_threads_expected - 1
     for t in range(number_of_threads_expected):
         q = Queue()

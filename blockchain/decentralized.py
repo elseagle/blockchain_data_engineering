@@ -1,4 +1,5 @@
 import base64
+from concurrent.futures import thread
 import hashlib
 import os
 import random
@@ -112,10 +113,9 @@ def verify_chain(chain_):
 
 
 class MyThread(threading.Thread):
-    def __init__(self, queue, queue2, args=(), kwargs=None):
+    def __init__(self, queue, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = queue
-        self.queue2 = queue2
         self.daemon = True
         self.counter = args[0]
         self.miner = args[1]
@@ -132,6 +132,7 @@ class MyThread(threading.Thread):
         )
 
         while True:
+            # if len(self.blocks)
 
             x = main(
                 counter=self.counter,
@@ -142,8 +143,8 @@ class MyThread(threading.Thread):
 
             if x[0].startswith(self.padding):
                 self.counter += 1
-                # if len(self.blocks) == 10:
-                #     break
+                if len(self.blocks) == 10:
+                    return True
 
                 last_hash = str(x[0])
                 miner = x[3]
@@ -170,10 +171,16 @@ class MyThread(threading.Thread):
                 else:
                     print(name, "Block has data already")
                 break
+            if len(self.blocks) != 0:
+                self.receive_message(self.miner, self.queue)
 
     def receive_message(self, name_, updated_queue):
-        new_blocks = updated_queue.get()
-        print(f"Thread-{str(name_+1)}", "Starting Process B")
+        if not updated_queue.empty():
+
+            new_blocks = updated_queue.get()
+        else:
+            return
+        print(f"Thread-{str(name_)}", "Starting Process B")
 
         if new_blocks:
             while True:
@@ -183,9 +190,9 @@ class MyThread(threading.Thread):
 
                 x = main(
                     counter=new_counter,
-                    miner=f"{str(name_+1)}",
+                    miner=f"{str(name_)}",
                     last_hash=last_hash,
-                    padding="0000",
+                    padding=self.padding,
                 )
 
                 if x[0].startswith(padding):
@@ -213,7 +220,7 @@ class MyThread(threading.Thread):
 
                     print(len(new_blocks))
                     print(
-                        f"Thread-{str(name_+1)}",
+                        f"Thread-{str(name_)}",
                         "Sending message: Block {} added".format(len(new_blocks)),
                     )
 
@@ -223,7 +230,7 @@ class MyThread(threading.Thread):
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
-    number_of_threads_expected = 4  # value can be adjusted
+    number_of_threads_expected = 6  # value can be adjusted
     number_of_messages_per_thread = number_of_threads_expected - 1
 
     start = timer()
@@ -236,19 +243,10 @@ if __name__ == "__main__":
 
     for t in range(number_of_threads_expected):
         q2 = Queue()
-        threads.append(MyThread(q, q2, args=(counter, t, last_hash, padding, blocks)))
+        miner = t + 1
+        threads.append(MyThread(q, args=(counter, miner, last_hash, padding, blocks)))
         threads[t].start()
         time.sleep(0.1)
-    new_blocks = []
-    while len(new_blocks) < 10:
-
-        for i, t in enumerate(threads):
-
-            new_blocks = q.get()
-            q.put(new_blocks)
-            final = t.receive_message(i, q)
-            if final:
-                break
 
     # close thread
     for t in threads:
