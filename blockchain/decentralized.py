@@ -214,7 +214,7 @@ class MyThread(threading.Thread):
                     print(len(new_blocks))
                     print(
                         f"Thread-{str(name_+1)}",
-                        "Received message: Block {} added".format(len(new_blocks)),
+                        "Sending message: Block {} added".format(len(new_blocks)),
                     )
 
                     break
