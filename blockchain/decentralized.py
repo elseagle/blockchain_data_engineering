@@ -11,10 +11,9 @@ from timeit import default_timer as timer
 from blockchain_generator import verify_chain, find_hash
 
 
-
 def main(counter: int, miner, last_hash: str = "", padding="0000"):
     """Generates hash based on last hash
-    
+
     Parameters:
         counter: increments on every block
         miner: current block's miner

@@ -41,13 +41,13 @@ if __name__ == "__main__":
     threads = []
     sample_word_list = []
     number_of_threads_expected = 4  # value can be adjusted
-    
+
     # the number of messages to be processed by a thread is k-1
     # where k is the number of threads
     number_of_messages_per_thread = number_of_threads_expected - 1
     for t in range(number_of_threads_expected):
         q = Queue()
-        
+
         # this is the unique message to be sent by thread
         sample_word = generateRandomAlphaNumericString(4)
 
@@ -61,8 +61,8 @@ if __name__ == "__main__":
         word_list_copy = sample_word_list.copy()
         # this removes the current thread's message, it shouldn't recieve its own message again
         word_list_copy.remove(sample_word_list[i])
-        
-        #  insert messages into queue 
+
+        #  insert messages into queue
         [t.queue.put(word) for word in word_list_copy]
 
     # close thread

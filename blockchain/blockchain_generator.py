@@ -70,9 +70,9 @@ def yield_nonce_and_hash():
 
 def mine_the_next_block(block):
     """Mines the next block in the chain
-    
+
     Paramenters:
-        block: the generator object 
+        block: the generator object
     """
     return next(block)
 

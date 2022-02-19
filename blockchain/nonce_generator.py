@@ -11,7 +11,6 @@ def generateRandomAlphaNumericString(length: int):
 
     Parameters:
         length (int): expected length of random string
-
     """
     letters = string.ascii_letters + string.digits
 
@@ -67,7 +66,7 @@ def generate_nonce(length: int, length_of_padding: int):
 
 def find_hash(text: str, length_of_padding: int = 4):
     """Finds the hash of the genrated nonce
-    
+
     Parameters
         text: the text to be hashed
         length_of_padding
@@ -82,8 +81,8 @@ if __name__ == "__main__":
     start = timer()
 
     while True:
-        # word below can be any string,  
-        word = generateRandomAlphaNumericString(1)  
+        # word below can be any string,
+        word = generateRandomAlphaNumericString(1)
         padding = "0000"
         x = find_hash(word, len(padding))
         if x[0].startswith(padding):
