@@ -1,8 +1,8 @@
 import threading
 import time
 from queue import Queue
-from nonce_generator import generateRandomAlphaNumericString
 
+from nonce_generator import generateRandomAlphaNumericString
 
 print_lock = threading.Lock()
 
