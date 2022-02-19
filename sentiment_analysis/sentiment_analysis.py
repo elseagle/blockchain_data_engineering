@@ -29,7 +29,7 @@ def get_config():
         os.exit()
 
 
-def fetch_certik_tweets(api, user_handle):
+def fetch_user_tweets(api, user_handle):
     tweet_list = []
     tweets = api.user_timeline(
         screen_name=user_handle,
@@ -78,7 +78,7 @@ def get_sentiment(filtered_tweets):
 
 def main(filter_word, user_handle):
     api = get_config()
-    all_tweets = fetch_certik_tweets(api, user_handle)
+    all_tweets = fetch_user_tweets(api, user_handle)
     filtered_tweets = filter_by_word(filter_word, all_tweets)
     if len(filtered_tweets) == 0:
         return {
@@ -92,4 +92,4 @@ def main(filter_word, user_handle):
 
 if __name__ == "__main__":
     USER_HANDLE = os.getenv("USER_HANDLE")
-    main(filter_word="crypto", user_handle=USER_HANDLE)
+    print(main(filter_word="crypto", user_handle=USER_HANDLE))
