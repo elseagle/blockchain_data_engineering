@@ -1,10 +1,7 @@
-import base64
-import hashlib
-import os
 from pprint import pp
-import random
 from timeit import default_timer as timer
-from nonce_generator import hash_string, generate_nonce
+
+from nonce_generator import generate_nonce, hash_string
 
 
 def to_string(miner_: int):
