@@ -169,7 +169,7 @@ class MyThread(threading.Thread):
             if len(self.blocks) != 0:
                 f = self.mine_next_block(self.miner, self.queue)
 
-    def mine_next_block(self, name_, updated_queue):
+    def mine_the_next_block(self, name_, updated_queue):
         new_blocks = updated_queue.get()
         print(f"Thread-{str(name_)}", "Starting Process B")
 
