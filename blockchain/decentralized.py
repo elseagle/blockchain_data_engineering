@@ -1,5 +1,4 @@
 import base64
-from concurrent.futures import thread
 import hashlib
 import os
 import random
@@ -9,8 +8,6 @@ import time
 from pprint import pp
 from queue import Queue
 from timeit import default_timer as timer
-
-print_lock = threading.Lock()
 
 
 def generateRandomAlphaNumericString(length):
@@ -227,7 +224,6 @@ if __name__ == "__main__":
     threads = []
     sample_word_list = []
     number_of_threads_expected = 6  # value can be adjusted
-    number_of_messages_per_thread = number_of_threads_expected - 1
 
     start = timer()
     counter = 1
