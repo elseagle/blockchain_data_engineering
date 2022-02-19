@@ -1,19 +1,10 @@
-import random
-import string
 import threading
 import time
 from queue import Queue
+from nonce_generator import generateRandomAlphaNumericString
 
 
 print_lock = threading.Lock()
-
-
-def generateRandomAlphaNumericString(length):
-    # Generate alphanumeric string
-    letters = string.ascii_letters + string.digits
-
-    result_str = "".join(random.choice(letters) for i in range(length))
-    return result_str
 
 
 class MyThread(threading.Thread):
@@ -38,6 +29,7 @@ class MyThread(threading.Thread):
 
     def receive_message(self, message):
         if self.received_message:
+            # The lock makes the thread print it received message before exiting
             with print_lock:
                 print(
                     threading.currentThread().getName(),
@@ -49,9 +41,14 @@ if __name__ == "__main__":
     threads = []
     sample_word_list = []
     number_of_threads_expected = 4  # value can be adjusted
+    
+    # the number of messages to be processed by a thread is k-1
+    # where k is the number of threads
     number_of_messages_per_thread = number_of_threads_expected - 1
     for t in range(number_of_threads_expected):
         q = Queue()
+        
+        # this is the unique message to be sent by thread
         sample_word = generateRandomAlphaNumericString(4)
 
         sample_word_list.append(sample_word)
@@ -64,6 +61,8 @@ if __name__ == "__main__":
         word_list_copy = sample_word_list.copy()
         # this removes the current thread's message, it shouldn't recieve its own message again
         word_list_copy.remove(sample_word_list[i])
+        
+        #  insert messages into queue 
         [t.queue.put(word) for word in word_list_copy]
 
     # close thread
