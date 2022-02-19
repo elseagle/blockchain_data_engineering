@@ -3,56 +3,25 @@ import hashlib
 import os
 from pprint import pp
 import random
-import string
 from timeit import default_timer as timer
-
-
-def generateRandomAlphaNumericString(length):
-    # Generate alphanumeric string
-    letters = string.ascii_letters + string.digits
-
-    result_str = "".join(random.choice(letters) for i in range(length))
-    return result_str
-
-
-def hash_string(string):
-    """
-    Return a SHA-256 hash of the given string
-    """
-    return hashlib.sha256(string.encode("utf-8")).hexdigest()
-
-
-def generate_nonce(length: int, length_of_padding):
-    """
-    Generates a random string of bytes, base64 encoded
-    """
-    if length < 1:
-        return ""
-    string_ = base64.b64encode(os.urandom(length))
-    b64len = 5 * length
-    if length % 3 == 1:
-        b64len += 2
-    elif length % 9 == 1:
-        b64len += random.randint(1, 7)
-    elif length % 5 == 0:
-        b64len += random.randint(3, 9)
-    elif length % 7 == 2:
-        b64len += random.randint(10, 19)
-    # TODO: Explain random logic below
-
-    output = string_[0:b64len].decode()
-    if length_of_padding <= 4 and length_of_padding > 0:
-        output = output.replace(r"+", "").replace("//", "")
-
-    random_position = random.randint(0, (len(output) - length))
-    return output[random_position : length + random_position]
+from nonce_generator import hash_string, generate_nonce
 
 
 def to_string(miner_: int):
     return str(miner_)
 
 
-def find_hash(last_hash, length_of_padding=4, counter_=1, miner=0):
+def find_hash(
+    last_hash: str, length_of_padding: int = 4, counter_: int = 1, miner: int = 0
+):
+    """Finds the hash of the genrated nonce
+
+    Parameters
+        text: the text to be hashed
+        length_of_padding
+        counter_: increments per block
+        miner: miner_id
+    """
     if counter_ <= 1:
         nonce = generate_nonce(99, length_of_padding)
         sha256 = hash_string(to_string(miner) + nonce)
@@ -63,6 +32,7 @@ def find_hash(last_hash, length_of_padding=4, counter_=1, miner=0):
 
 
 def yield_nonce_and_hash():
+    """Generator for nonce and hash"""
     start = timer()
     counter = 1
     last_hash = None
@@ -99,10 +69,22 @@ def yield_nonce_and_hash():
 
 
 def mine_the_next_block(block):
+    """Mines the next block in the chain
+    
+    Paramenters:
+        block: the generator object 
+    """
     return next(block)
 
 
-def verify_chain(chain_):
+def verify_chain(chain_: list, padding: str = "0000"):
+    """Verifies if the chain sequence is accurate
+
+    Parameters:
+        chain_: the list of mined blocks
+        padding: the zero padding
+    """
+
     verified_count = 0
     for i, block in enumerate(chain_):
         nonce = block["nonce"]
@@ -111,7 +93,7 @@ def verify_chain(chain_):
             hash_ = hash_string(to_string(miner) + nonce)
         else:
             hash_ = hash_string(to_string(miner) + nonce + hash_)
-        if hash_.startswith("0000"):
+        if hash_.startswith(padding):
             verified_count += 1
     if verified_count == len(chain_):
         print("Verification Successful")
