@@ -113,9 +113,8 @@ def verify_chain(chain_):
 
 
 class MyThread(threading.Thread):
-    def __init__(self, queue, args=(), kwargs=None):
+    def __init__(self, args=(), kwargs=None):
         threading.Thread.__init__(self, args=(), kwargs=None)
-        self.queue = queue
         self.daemon = True
         self.counter = args[0]
         self.miner = args[1]
@@ -131,8 +130,7 @@ class MyThread(threading.Thread):
             "Starting Process A",
         )
 
-        while True:
-            # if len(self.blocks)
+        while len(self.blocks) <10:
 
             x = main(
                 counter=self.counter,
@@ -166,25 +164,22 @@ class MyThread(threading.Thread):
                         self.blocks,
                     )
 
-                    self.queue.queue.clear()
-                    self.queue.put(self.blocks)
+               
                 else:
                     print(name, "Block has data already")
                 break
             if len(self.blocks) != 0:
-                self.mine_next_block(self.miner, self.queue)
+                f = self.mine_next_block(self.miner)
+               
+                
 
-    def mine_next_block(self, name_, updated_queue):
-        if not updated_queue.empty():
-
-            new_blocks = updated_queue.get()
-        else:
-            return
+    def mine_next_block(self, name_):
+       
         print(f"Thread-{str(name_)}", "Starting Process B")
 
-        if new_blocks:
-            while True:
-                last_block = new_blocks[-1]
+        if self.blocks:
+            while len(self.blocks) < 10:
+                last_block = self.blocks[-1]
                 new_counter = last_block["counter"]
                 last_hash = last_block["last_hash"]
 
@@ -197,18 +192,13 @@ class MyThread(threading.Thread):
 
                 if x[0].startswith(padding):
                     new_counter += 1
-                    if len(new_blocks) == 10:
-                        pp(new_blocks)
-                        verify_chain(new_blocks)
-                        print("DONE")
-                        return True
+                    
 
                     last_hash = str(x[0])
                     miner = x[3]
                     print()
                     nonce = x[1]
-                    updated_queue.put(new_blocks)
-                    new_blocks.append(
+                    self.blocks.append(
                         {
                             "nonce": nonce,
                             "miner": miner,
@@ -216,13 +206,18 @@ class MyThread(threading.Thread):
                             "counter": new_counter,
                         }
                     )
-                    verify_chain(new_blocks)
+                    verify_chain(self.blocks)
 
-                    print(len(new_blocks))
+                    print(len(self.blocks))
                     print(
                         f"Thread-{str(name_)}",
-                        "Sending message: Block {} added".format(len(new_blocks)),
+                        "Sending message: Block {} added".format(len(self.blocks)),
                     )
+                    if len(self.blocks) == 10:
+                        pp(self.blocks)
+                        verify_chain(self.blocks)
+                        print("DONE")
+                        return True
 
                     break
 
@@ -239,12 +234,11 @@ if __name__ == "__main__":
     last_hash = None
     miner = None
     blocks = []
-    q = Queue()
 
     for t in range(number_of_threads_expected):
         q2 = Queue()
         miner = t + 1
-        threads.append(MyThread(q, args=(counter, miner, last_hash, padding, blocks)))
+        threads.append(MyThread( args=(counter, miner, last_hash, padding, blocks)))
         threads[t].start()
         time.sleep(0.1)
 
