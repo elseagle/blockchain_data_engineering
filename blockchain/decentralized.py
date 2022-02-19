@@ -130,7 +130,7 @@ class MyThread(threading.Thread):
             "Starting Process A",
         )
 
-        while len(self.blocks) <10:
+        while len(self.blocks) < 10:
 
             x = main(
                 counter=self.counter,
@@ -164,17 +164,14 @@ class MyThread(threading.Thread):
                         self.blocks,
                     )
 
-               
                 else:
                     print(name, "Block has data already")
                 break
             if len(self.blocks) != 0:
                 f = self.mine_next_block(self.miner)
-               
-                
 
     def mine_next_block(self, name_):
-       
+
         print(f"Thread-{str(name_)}", "Starting Process B")
 
         if self.blocks:
@@ -192,7 +189,6 @@ class MyThread(threading.Thread):
 
                 if x[0].startswith(padding):
                     new_counter += 1
-                    
 
                     last_hash = str(x[0])
                     miner = x[3]
@@ -238,7 +234,7 @@ if __name__ == "__main__":
     for t in range(number_of_threads_expected):
         q2 = Queue()
         miner = t + 1
-        threads.append(MyThread( args=(counter, miner, last_hash, padding, blocks)))
+        threads.append(MyThread(args=(counter, miner, last_hash, padding, blocks)))
         threads[t].start()
         time.sleep(0.1)
 
