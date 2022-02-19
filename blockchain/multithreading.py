@@ -6,7 +6,11 @@ result_str = ""
 
 
 def generateRandomAlphaNumericString(length):
-    # Generate alphanumeric string
+    """Generate random alphanumeric string of a specified length
+
+    Parameters:
+        length (int): expected length of random string
+    """
     global result_str
     letters = string.ascii_letters + string.digits
 
@@ -17,7 +21,6 @@ def generateRandomAlphaNumericString(length):
 
 if __name__ == "__main__":
     # creating thread
-    # TODO:Make calling K number threads flexible
     t1 = threading.Thread(target=generateRandomAlphaNumericString, args=(19,), name=1)
     t2 = threading.Thread(target=generateRandomAlphaNumericString, args=(15,), name=2)
     t3 = threading.Thread(target=generateRandomAlphaNumericString, args=(17,), name=3)
