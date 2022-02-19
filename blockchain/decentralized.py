@@ -138,6 +138,9 @@ class MyThread(threading.Thread):
                         "Sending message: Block {} added".format(len(new_blocks)),
                     )
                     if len(new_blocks) == 10:
+                        for block in new_blocks:
+                            del block["counter"]
+                            del block["last_hash"]
                         pp(new_blocks)
                         verify_chain(new_blocks, self.padding)
                         print("DONE")
