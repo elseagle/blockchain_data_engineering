@@ -8,74 +8,19 @@ import time
 from pprint import pp
 from queue import Queue
 from timeit import default_timer as timer
+from blockchain_generator import verify_chain, find_hash
 
 
-def generateRandomAlphaNumericString(length):
-    # Generate alphanumeric string
-    letters = string.ascii_letters + string.digits
 
-    result_str = "".join(random.choice(letters) for i in range(length))
-    return result_str
-
-
-def generate_nonce(length: int, length_of_padding):
+def main(counter: int, miner, last_hash: str = "", padding="0000"):
+    """Generates hash based on last hash
+    
+    Parameters:
+        counter: increments on every block
+        miner: current block's miner
+        last_hash: hash from last block mine
+        padding: the zero padding
     """
-    Generates a random string of bytes, base64 encoded
-    """
-    if length < 1:
-        return ""
-    string_ = base64.b64encode(os.urandom(length))
-    b64len = 5 * length
-    if length % 3 == 1:
-        b64len += 2
-    elif length % 9 == 1:
-        b64len += random.randint(1, 7)
-    elif length % 5 == 0:
-        b64len += random.randint(3, 9)
-    elif length % 7 == 2:
-        b64len += random.randint(10, 19)
-    # TODO: Explain random logic below
-
-    output = string_[0:b64len].decode()
-    if length_of_padding <= 4 and length_of_padding > 0:
-        output = output.replace(r"+", "").replace("/", "")
-
-    random_position = random.randint(0, (len(output) - length))
-    return output[random_position : length + random_position]
-
-
-def to_string(miner_: int):
-    return str(miner_)
-
-
-def hash_string(string):
-    """
-    Return a SHA-256 hash of the given string
-    """
-    return hashlib.sha256(string.encode("utf-8")).hexdigest()
-
-
-def find_hash(last_hash, length_of_padding=4, counter_=1, miner=0):
-    if counter_ <= 1:
-        nonce = generate_nonce(99, length_of_padding)
-        sha256 = hash_string(to_string(miner) + nonce)
-    else:
-        nonce = generate_nonce(35, length_of_padding)
-        sha256 = hash_string(to_string(miner) + nonce + last_hash)
-    return sha256, nonce, len(nonce), miner, last_hash
-
-
-def find_hash(last_hash, length_of_padding=4, counter_=1, miner=0):
-    if counter_ <= 1:
-        nonce = generate_nonce(99, length_of_padding)
-        sha256 = hash_string(to_string(miner) + nonce)
-    else:
-        nonce = generate_nonce(35, length_of_padding)
-        sha256 = hash_string(to_string(miner) + nonce + last_hash)
-    return sha256, nonce, len(nonce), miner, last_hash
-
-
-def main(counter, miner, last_hash=None, padding="0000"):
     if last_hash:
         x = find_hash(
             length_of_padding=len(padding),
@@ -88,25 +33,6 @@ def main(counter, miner, last_hash=None, padding="0000"):
             length_of_padding=len(padding), counter_=counter, last_hash="", miner=miner
         )
     return x
-
-
-def verify_chain(chain_, padding):
-    verified_count = 0
-    for i, block in enumerate(chain_):
-        nonce = block["nonce"]
-        miner = block["miner"]
-        if i < 1:
-            hash_ = hash_string(to_string(miner) + nonce)
-        else:
-            hash_ = hash_string(to_string(miner) + nonce + hash_)
-        if hash_.startswith(padding):
-            verified_count += 1
-    if verified_count == len(chain_):
-        print("Verification Successful")
-        return True
-    else:
-        print("Verification Failed")
-        return False
 
 
 class MyThread(threading.Thread):
@@ -125,7 +51,7 @@ class MyThread(threading.Thread):
 
         print(
             name,
-            "Starting Process A",
+            "Starting intial mine...",
         )
 
         while len(self.blocks) < 10:
@@ -167,11 +93,12 @@ class MyThread(threading.Thread):
                     print(name, "Block has data already")
                 break
             if len(self.blocks) != 0:
-                f = self.mine_next_block(self.miner, self.queue)
+                self.mine_the_next_block(self.miner, self.queue)
 
     def mine_the_next_block(self, name_, updated_queue):
+        # get block from queue
         new_blocks = updated_queue.get()
-        print(f"Thread-{str(name_)}", "Starting Process B")
+        print(f"Thread-{str(name_)}", "Mining next block...")
 
         if new_blocks:
             while True:
@@ -228,7 +155,7 @@ if __name__ == "__main__":
     start = timer()
     counter = 1
     padding = "0000"
-    last_hash = None
+    last_hash = ""
     miner = None
     blocks = []
     q = Queue()
