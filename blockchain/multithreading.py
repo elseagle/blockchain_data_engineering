@@ -21,9 +21,12 @@ def generateRandomAlphaNumericString(length):
 
 if __name__ == "__main__":
     # creating thread
-    t1 = threading.Thread(target=generateRandomAlphaNumericString, args=(19,), name=1)
-    t2 = threading.Thread(target=generateRandomAlphaNumericString, args=(15,), name=2)
-    t3 = threading.Thread(target=generateRandomAlphaNumericString, args=(17,), name=3)
+    t1 = threading.Thread(
+        target=generateRandomAlphaNumericString, args=(19,), name=1)
+    t2 = threading.Thread(
+        target=generateRandomAlphaNumericString, args=(15,), name=2)
+    t3 = threading.Thread(
+        target=generateRandomAlphaNumericString, args=(17,), name=3)
 
     # starting threads
     t1.start()

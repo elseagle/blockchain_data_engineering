@@ -61,7 +61,7 @@ def generate_nonce(length: int, length_of_padding: int):
     # use the length of decoded string...
     # ...and expected output to slice out the random strings
     random_position = random.randint(0, (len(output) - length))
-    return output[random_position : length + random_position]
+    return output[random_position: length + random_position]
 
 
 def find_hash(text: str, length_of_padding: int = 4):

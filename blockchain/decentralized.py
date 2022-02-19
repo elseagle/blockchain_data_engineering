@@ -130,7 +130,8 @@ class MyThread(threading.Thread):
                     print(len(new_blocks))
                     print(
                         f"Thread-{str(name_)}",
-                        "Sending message: Block {} added".format(len(new_blocks)),
+                        "Sending message: Block {} added".format(
+                            len(new_blocks)),
                     )
                     if len(new_blocks) == 10:
                         for block in new_blocks:
@@ -160,7 +161,8 @@ if __name__ == "__main__":
     for t in range(number_of_threads_expected):
 
         miner = t + 1
-        threads.append(MyThread(q, args=(counter, miner, last_hash, padding, blocks)))
+        threads.append(
+            MyThread(q, args=(counter, miner, last_hash, padding, blocks)))
         threads[t].start()
         time.sleep(0.1)
 
