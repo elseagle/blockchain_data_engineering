@@ -27,12 +27,12 @@ def hash_string(string: str):
     return hashlib.sha256(string.encode("utf-8")).hexdigest()
 
 
-def generate_nonce(length: int, length_of_padding: int):
+def generate_nonce(length: int, length_of_prefix: int):
     """Generates a random string of bytes, base64 encoded
 
     Parameters:
         length: expected length for nonce
-        length_of_padding: length of the padding onf the hash
+        length_of_prefix: length of the prefix onf the hash
 
     """
     if length < 1:
@@ -64,14 +64,14 @@ def generate_nonce(length: int, length_of_padding: int):
     return output[random_position: length + random_position]
 
 
-def find_hash(text: str, length_of_padding: int = 4):
+def find_hash(text: str, length_of_prefix: int = 4):
     """Finds the hash of the genrated nonce
 
     Parameters
         text: the text to be hashed
-        length_of_padding
+        length_of_prefix
     """
-    random_string = generate_nonce(100, length_of_padding)
+    random_string = generate_nonce((100 - len(text)), length_of_prefix)
 
     sha256 = hash_string(text + random_string)
     return sha256, random_string, len(random_string)
@@ -82,10 +82,10 @@ if __name__ == "__main__":
 
     while True:
         # word below can be any string,
-        word = generateRandomAlphaNumericString(1)
-        padding = "0000"
-        x = find_hash(word, len(padding))
-        if x[0].startswith(padding):
+        word = generateRandomAlphaNumericString(2)
+        prefix = "0000"
+        x = find_hash(word, len(prefix))
+        if x[0].startswith(prefix):
             print("Total Time:", (timer() - start))  # in seconds
             print("SHA256:", x[0])
             print()

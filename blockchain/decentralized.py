@@ -6,25 +6,25 @@ from timeit import default_timer as timer
 from blockchain_generator import verify_chain, find_hash
 
 
-def main(counter: int, miner, last_hash: str = "", padding="0000"):
+def main(counter: int, miner, last_hash: str = "", prefix="0000"):
     """Generates hash based on last hash
 
     Parameters:
         counter: increments on every block
         miner: current block's miner
         last_hash: hash from last block mine
-        padding: the zero padding
+        prefix: the zero prefix
     """
     if last_hash:
         x = find_hash(
-            length_of_padding=len(padding),
+            length_of_prefix=len(prefix),
             counter_=counter,
             miner=miner,
             last_hash=last_hash,
         )
     else:
         x = find_hash(
-            length_of_padding=len(padding), counter_=counter, last_hash="", miner=miner
+            length_of_prefix=len(prefix), counter_=counter, last_hash="", miner=miner
         )
     return x
 
@@ -34,135 +34,108 @@ class MyThread(threading.Thread):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = queue
         self.daemon = True
-        self.counter = args[0]
+        self.counter = 1
         self.miner = args[1]
-        self.last_hash = args[2]
-        self.padding = args[3]
-        self.blocks = args[4]
+        self.last_hash = ""
+        self.prefix = "0000"
+        self.blocks = []
+
+    def validate_and_save_new_chain(self, latest_block):
+        temp_blockchain = self.blocks.copy()
+        temp_blockchain.append(latest_block)
+        is_valid = verify_chain(temp_blockchain)
+        if is_valid:
+            self.blocks.append(latest_block)
+            self.last_hash = latest_block["last_hash"]
+        del temp_blockchain
+        return is_valid
+
+    def mine_block(self, name):
+        if len(self.blocks) > (self.counter - 1):
+            self.counter += 1
+            return
+        x = main(
+            counter=self.counter,
+            miner=f"{str(name)}",
+            last_hash=self.last_hash,
+            prefix=self.prefix,
+        )
+        if x[0].startswith(prefix):
+            self.counter += 1
+
+            last_hash = str(x[0])
+            miner = x[3]
+            nonce = x[1]
+            new_block = {
+                "nonce": nonce,
+                "miner": miner,
+                "last_hash": last_hash,
+                "counter": self.counter,
+            }
+            self.validate_and_save_new_chain(new_block)
+
+            global queue_list
+            event.clear()
+            for q in queue_list:
+                q.put(self.blocks)
+
+            if len(self.blocks) == 10:
+                for block in self.blocks:
+                    del block["counter"]
+                    del block["last_hash"]
+                pp(self.blocks)
+                verify_chain(self.blocks, self.prefix)
+                print("DONE")
+                self.queue.queue.clear()
+                self.queue.task_done()
+            event.set()
 
     def run(self):
         name = threading.currentThread().getName()
 
         print(
             name,
-            "Starting intial mine...",
+            "Starting initial mine...",
         )
-
+        event.set()
         while len(self.blocks) < 10:
+            self.mine_block(name=self.miner)
 
-            x = main(
-                counter=self.counter,
-                miner=name.replace("Thread-", ""),
-                last_hash=self.last_hash,
-                padding=self.padding,
-            )
+            self.listen_to_updates()
 
-            if x[0].startswith(self.padding):
-                self.counter += 1
-                if len(self.blocks) == 10:
-                    return True
-
-                last_hash = str(x[0])
-                miner = x[3]
-                nonce = x[1]
-                if len(self.blocks) == 0:
-
-                    self.blocks.append(
-                        {
-                            "nonce": nonce,
-                            "miner": miner,
-                            "last_hash": last_hash,
-                            "counter": self.counter,
-                        }
-                    )
-                    self.queue.put(blocks)
-
-                    print(
-                        threading.currentThread().getName(),
-                        "Sending message:",
-                        self.blocks,
-                    )
-
-                else:
-                    print(name, "Block has data already")
-                break
-            if len(self.blocks) != 0:
-                self.mine_the_next_block(self.miner, self.queue)
-
-    def mine_the_next_block(self, name_, updated_queue):
-        # get block from queue
-        new_blocks = updated_queue.get()
-        print(f"Thread-{str(name_)}", "Mining next block...")
-
-        if new_blocks:
-            while True:
-                if len(new_blocks) > 9:
-                    break
-                last_block = new_blocks[-1]
-                new_counter = last_block["counter"]
-                last_hash = last_block["last_hash"]
-
-                x = main(
-                    counter=new_counter,
-                    miner=f"{str(name_)}",
-                    last_hash=last_hash,
-                    padding=self.padding,
-                )
-
-                if x[0].startswith(padding):
-                    new_counter += 1
-
-                    last_hash = str(x[0])
-                    miner = x[3]
-                    print()
-                    nonce = x[1]
-                    new_blocks.append(
-                        {
-                            "nonce": nonce,
-                            "miner": miner,
-                            "last_hash": last_hash,
-                            "counter": new_counter,
-                        }
-                    )
-                    verify_chain(new_blocks, self.padding)
-                    updated_queue.put(new_blocks)
-
-                    print(len(new_blocks))
-                    print(
-                        f"Thread-{str(name_)}",
-                        "Sending message: Block {} added".format(
-                            len(new_blocks)),
-                    )
-                    if len(new_blocks) == 10:
-                        for block in new_blocks:
-                            del block["counter"]
-                            del block["last_hash"]
-                        pp(new_blocks)
-                        verify_chain(new_blocks, self.padding)
-                        print("DONE")
-                        updated_queue.queue.clear()
-                        updated_queue.task_done()
-                        return updated_queue
+    def listen_to_updates(self):
+        if not self.queue.empty():
+            tracking_chain = self.queue.get()
+            if len(tracking_chain) > len(self.blocks):
+                is_valid = verify_chain(tracking_chain)
+                if is_valid:
+                    self.blocks = tracking_chain.copy()
+                    try:
+                        self.last_hash = tracking_chain[-1]["last_hash"]
+                    except KeyError:
+                        pass
 
 
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
-    number_of_threads_expected = 6  # value can be adjusted
+    number_of_threads_expected = 7  # value can be adjusted
 
     start = timer()
     counter = 1
-    padding = "0000"
+    prefix = "00000"
     last_hash = ""
     miner = None
     blocks = []
-    q = Queue()
+    queue_list = []
 
+    event = threading.Event()
     for t in range(number_of_threads_expected):
-
+        q = Queue()
+        queue_list.append(q)
         miner = t + 1
         threads.append(
-            MyThread(q, args=(counter, miner, last_hash, padding, blocks)))
+            MyThread(q, args=(counter, miner, last_hash, prefix)))
         threads[t].start()
         time.sleep(0.1)
 

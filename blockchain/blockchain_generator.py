@@ -9,22 +9,23 @@ def to_string(miner_: int):
 
 
 def find_hash(
-    last_hash: str, length_of_padding: int = 4, counter_: int = 1, miner: int = 0
+    last_hash: str, length_of_prefix: int = 4, counter_: int = 1, miner: int = 0
 ):
     """Finds the hash of the generated nonce
 
     Parameters
         text: the text to be hashed
-        length_of_padding
+        length_of_prefix
         counter_: increments per block
         miner: miner_id
     """
     if counter_ <= 1:
-        nonce = generate_nonce(99, length_of_padding)
+        nonce = generate_nonce((100 - len(str(miner))), length_of_prefix)
         sha256 = hash_string(to_string(miner) + nonce)
     else:
-        nonce = generate_nonce(35, length_of_padding)
-        sha256 = hash_string(to_string(miner) + nonce + last_hash)
+        nonce = generate_nonce(
+            (100 - len(str(miner)) - len(last_hash)), length_of_prefix)
+        sha256 = hash_string(last_hash + to_string(miner) + nonce)
     return sha256, nonce, len(nonce), miner, last_hash
 
 
@@ -37,19 +38,19 @@ def yield_nonce_and_hash():
     blocks = []
 
     while True:
-        padding = "0000"
+        prefix = "0000"
         if last_hash:
             x = find_hash(
-                length_of_padding=len(padding),
+                length_of_prefix=len(prefix),
                 counter_=counter,
                 miner=miner,
                 last_hash=last_hash,
             )
         else:
             x = find_hash(
-                length_of_padding=len(padding), counter_=counter, last_hash=""
+                length_of_prefix=len(prefix), counter_=counter, last_hash=""
             )
-        if x[0].startswith(padding):
+        if x[0].startswith(prefix):
             counter += 1
             if len(blocks) == 10:
                 break
@@ -74,12 +75,12 @@ def mine_the_next_block(block):
     return next(block)
 
 
-def verify_chain(chain_: list, padding: str = "0000"):
+def verify_chain(chain_: list, prefix: str = "0000"):
     """Verifies if the chain sequence is accurate
 
     Parameters:
         chain_: the list of mined blocks
-        padding: the zero padding
+        prefix: the zero prefix
     """
 
     verified_count = 0
@@ -89,11 +90,11 @@ def verify_chain(chain_: list, padding: str = "0000"):
         if i < 1:
             hash_ = hash_string(to_string(miner) + nonce)
         else:
-            hash_ = hash_string(to_string(miner) + nonce + hash_)
-        if hash_.startswith(padding):
+            hash_ = hash_string(hash_ + to_string(miner) + nonce)
+        if hash_.startswith(prefix):
             verified_count += 1
     if verified_count == len(chain_):
-        print("Verification Successful")
+        # print("Verification Successful")
         return True
     else:
         print("Verification Failed")
