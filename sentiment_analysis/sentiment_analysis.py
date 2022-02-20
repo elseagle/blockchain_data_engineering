@@ -67,7 +67,6 @@ def get_sentiment(filtered_tweets):
     neg = sentiments.count("Negative")
     neu = sentiments.count("Neutral")
     total = len(filtered_tweets)
-    print(total)
     per_pos = round(float(pos / total * 100), 3)
     per_neg = round(float(neg / total * 100), 3)
     per_neu = round(float(neu / total * 100), 3)
