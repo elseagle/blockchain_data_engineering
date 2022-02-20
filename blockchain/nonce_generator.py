@@ -79,10 +79,10 @@ def find_hash(text: str, length_of_prefix: int = 4):
 
 if __name__ == "__main__":
     start = timer()
+    word = input("Kindly input word: ")
 
     while True:
         # word below can be any string,
-        word = generateRandomAlphaNumericString(2)
         prefix = "0000"
         x = find_hash(word, len(prefix))
         if x[0].startswith(prefix):

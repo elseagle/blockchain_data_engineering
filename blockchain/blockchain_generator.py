@@ -31,7 +31,6 @@ def find_hash(
 
 def yield_nonce_and_hash():
     """Generator for nonce and hash"""
-    start = timer()
     counter = 1
     last_hash = None
     miner = None
@@ -55,12 +54,8 @@ def yield_nonce_and_hash():
             if len(blocks) == 10:
                 break
 
-            print("Total Time:", (timer() - start))  # in seconds
-            print("SHA256:", x[0])
             last_hash = str(x[0])
             miner = x[3]
-            print()
-            start = timer()
             blocks.append({"nonce": x[1], "miner": 0})
 
             yield blocks

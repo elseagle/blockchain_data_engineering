@@ -1,3 +1,4 @@
+import random
 import threading
 import time
 from pprint import pp
@@ -119,11 +120,10 @@ class MyThread(threading.Thread):
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
-    number_of_threads_expected = 7  # value can be adjusted
+    number_of_threads_expected = random.randint(2, 10)  # value can be adjusted
 
-    start = timer()
     counter = 1
-    prefix = "00000"
+    prefix = "0000"
     last_hash = ""
     miner = None
     blocks = []

@@ -1,3 +1,4 @@
+import random
 import threading
 import time
 from queue import Queue
@@ -12,14 +13,14 @@ class MyThread(threading.Thread):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = queue
         self.daemon = True
-        self.received_message = args[0]
+        self.to_be_sent = args[0]
         self.expected_messages = args[1]
 
     def run(self):
         print(
             threading.currentThread().getName(),
             "Sending message:",
-            self.received_message,
+            self.to_be_sent,
         )
         for _ in range(self.expected_messages):
             val = self.queue.get()
@@ -28,7 +29,7 @@ class MyThread(threading.Thread):
             self.receive_message(val)
 
     def receive_message(self, message):
-        if self.received_message:
+        if self.to_be_sent:
             # The lock makes the thread print it received message before exiting
             with print_lock:
                 print(
@@ -40,7 +41,7 @@ class MyThread(threading.Thread):
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
-    number_of_threads_expected = 4  # value can be adjusted
+    number_of_threads_expected = random.randint(2, 6)  # value can be adjusted
 
     # the number of messages to be processed by a thread is k-1
     # where k is the number of threads
