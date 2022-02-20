@@ -11,7 +11,7 @@ def to_string(miner_: int):
 def find_hash(
     last_hash: str, length_of_padding: int = 4, counter_: int = 1, miner: int = 0
 ):
-    """Finds the hash of the genrated nonce
+    """Finds the hash of the generated nonce
 
     Parameters
         text: the text to be hashed
@@ -68,7 +68,7 @@ def yield_nonce_and_hash():
 def mine_the_next_block(block):
     """Mines the next block in the chain
 
-    Paramenters:
+    Parameters:
         block: the generator object
     """
     return next(block)
