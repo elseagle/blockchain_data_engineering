@@ -78,10 +78,13 @@ def get_sentiment(filtered_tweets):
                 },
                 "status": "success"}
 
-def main(filter_word, user_handle):
+def main(user_handle, filter_word=""):
     api = get_config()
     all_tweets = fetch_user_tweets(api, user_handle)
-    filtered_tweets = filter_by_word(filter_word, all_tweets)
+    if filter_word:
+        filtered_tweets = filter_by_word(filter_word, all_tweets)
+    else:
+        filtered_tweets = all_tweets
     if len(filtered_tweets) == 0:
         return {
             "data": {"positive": 0, "negative": 0, "neutral": 0},
