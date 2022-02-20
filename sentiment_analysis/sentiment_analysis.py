@@ -55,28 +55,27 @@ def get_sentiment(filtered_tweets):
     for tweet_ in filtered_tweets:
         analysis = tb(tweet_)
         polarity = analysis.sentiment.polarity
-        output = 'Positive'
-        if(polarity < 0):
-            output = 'Negative'
-        elif(0<= polarity<=0.2):
-            output = 'Neutral'
-            
+        output = "Positive"
+        if polarity < 0:
+            output = "Negative"
+        elif 0 <= polarity <= 0.2:
+            output = "Neutral"
+
         sentiments.append(output)
-        
+
     pos = sentiments.count("Positive")
     neg = sentiments.count("Negative")
     neu = sentiments.count("Neutral")
     total = len(filtered_tweets)
     print(total)
-    per_pos = round(float(pos/total* 100), 3)
-    per_neg = round(float(neg/total* 100), 3 )
-    per_neu = round(float(neu/total* 100), 3)
-    return { "data":{
-                "positive": per_pos,
-                "negative":per_neg, 
-                "neutral":per_neu
-                },
-                "status": "success"}
+    per_pos = round(float(pos / total * 100), 3)
+    per_neg = round(float(neg / total * 100), 3)
+    per_neu = round(float(neu / total * 100), 3)
+    return {
+        "data": {"positive": per_pos, "negative": per_neg, "neutral": per_neu},
+        "status": "success",
+    }
+
 
 def main(user_handle, filter_word=""):
     api = get_config()
