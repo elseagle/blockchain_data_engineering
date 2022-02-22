@@ -13,12 +13,15 @@ This section is divided into 5, where each section matches with given descriptio
 
 The goal of this exercise is to generate a nonce.  Given a string, pad it on the right with random alphanumeric characters such that the padded string is 100 in length and its SHA256 hash starts with “0000”. Please search online for how to compute the SHA265 hash in your language. Three main functions are used to achieve this:
 1. generate_nonce
+   
    This function generates a random set of string/bytes using `os.urandom`, `base64`, and extra random logic that creates more random strings.
 
 2. hash_string
+    
     This converts any given string into SHA256
 
 3. find_hash
+   
    This hashes the text and the noce combined as one string
 
 Sample input:
