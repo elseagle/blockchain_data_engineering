@@ -9,16 +9,16 @@ from datetime import datetime as dt
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from aiocsv import AsyncDictWriter
-from utils.utils import remove_whitespace
-from utils.user_agents import user_agents
+from scraper.utils.utils import remove_whitespace
+from scraper.utils.user_agents import user_agents
 
 load_dotenv()
+
+PROXY_URL = os.getenv("PROXY_URL")
 try:
-    PROXY_USERNAME = os.environ["PROXY_USERNAME"]
-    PROXY_PASSWORD = os.environ["PROXY_PASSWORD"]
     PROJECT_DIRECTORY = os.environ["PROJECT_DIRECTORY"]
 except KeyError:
-    print("Proxy username or proxy_password or PROJECT_DIRECTORY not found in .env")
+    print("PROJECT_DIRECTORY not found in .env")
     exit()
 
 
@@ -29,7 +29,7 @@ headers = {
     "Referer": "https://www.coingecko.com/",
     "User-Agent": user_agent,
 }
-proxy = f"http://{PROXY_USERNAME}:{PROXY_PASSWORD}@proxy.inv.tech:24000"
+proxy = PROXY_URL
 
 
 async def get_coin_info(session, coin_row, semaphore_):
@@ -199,7 +199,7 @@ async def get_coins(coin_rows):
 
     project_directory = Path(PROJECT_DIRECTORY)
     async with aiofiles.open(
-        Path(f"{project_directory}/CSV_data/coingecko.csv"),
+        Path(f"{project_directory}/scraper/CSV_data/coingecko.csv"),
         mode="a",
         encoding="utf-8",
         newline="",
@@ -228,6 +228,6 @@ async def get_coins(coin_rows):
             quoting=csv.QUOTE_ALL,
         )
         await writer.writeheader()
-        await writer.writerows(responses)
+        await writer.writerows(list(filter(lambda x: type(x) == dict, responses)))
 
     return responses

@@ -2,7 +2,7 @@ import requests
 import time
 import asyncio
 from bs4 import BeautifulSoup
-from coingecko.async_get_coin_info import get_coins
+from scraper.coingecko.async_get_coin_info import get_coins
 
 
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())  # windows only
