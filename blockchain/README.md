@@ -25,7 +25,9 @@ The goal of this exercise is to generate a nonce.  Given a string, pad it on the
    This hashes the text and the noce combined as one string
 
 Sample input:
+
 'Certik'
+
 Sample Output:
     
     Total Time: 0.45311223599999995
