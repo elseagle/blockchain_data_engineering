@@ -1,7 +1,7 @@
 from create_tables import create_tables
 from get_initial_data import get_initial_data
-from utils.connect_db import connect
-from utils.creation_utils import insert_item, insert_many, select_many_records
+from scraper.utils.connect_db import connect
+from scraper.utils.creation_utils import insert_item, insert_many, select_many_records
 
 
 def seed_tables(conn, cur, number_of_coins):

@@ -6,39 +6,29 @@ import aiohttp
 from pathlib import Path
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
-from utils.user_agents import user_agents
-from coingecko.async_get_coin_info import get_coins
+from scraper.coingecko.async_get_coin_info import get_coins
 
 
 def get_initial_data(number_of_coins=120):
     load_dotenv()
-
+    PROXY_URL = os.getenv("PROXY_URL")
     try:
-        PROXY_USERNAME = os.environ["PROXY_USERNAME"]
-        PROXY_PASSWORD = os.environ["PROXY_PASSWORD"]
         PROJECT_DIRECTORY = os.environ["PROJECT_DIRECTORY"]
     except KeyError:
-        print("Proxy username or proxy_password or PROJECT_DIRECTORY not found in .env")
+        print("PROJECT_DIRECTORY not found in .env")
         exit()
 
     asyncio.set_event_loop_policy(
         asyncio.WindowsSelectorEventLoopPolicy()
     )  # windows only
 
-    proxy = f"http://{PROXY_USERNAME}:{PROXY_PASSWORD}@proxy.inv.tech:24000"
+    proxy = PROXY_URL
     start = time.time()
-    user_agent = user_agents()
-    headers = {
-        "Alt-Used": "www.coingecko.com",
-        "Host": "www.coingecko.com",
-        "Referer": "https://www.coingecko.com/",
-        "User-Agent": user_agent,
-    }
     page = requests.get("https://www.coingecko.com/")
     soup = BeautifulSoup(page.content, "html.parser")
     project_directory = Path(PROJECT_DIRECTORY)
     with open(
-        Path(f"{project_directory}/web_pages/coingecko.html"),
+        Path(f"{project_directory}/scraper/web_pages/coingecko.html"),
         "wb",
     ) as f:
         f.write(page.content)

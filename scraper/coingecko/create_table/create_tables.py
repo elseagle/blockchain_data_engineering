@@ -1,4 +1,4 @@
-from utils.connect_db import connect
+from scraper.utils.connect_db import connect
 
 
 def create_tables(conn, cur):
