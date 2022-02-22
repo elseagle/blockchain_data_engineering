@@ -29,7 +29,7 @@ def find_hash(
     return sha256, nonce, len(nonce), miner, last_hash
 
 
-def yield_nonce_and_hash():
+def yield_block():
     """Generator for nonce and hash"""
     counter = 1
     last_hash = None
@@ -97,7 +97,7 @@ def verify_chain(chain_: list, prefix: str = "0000"):
 
 
 if __name__ == "__main__":
-    chain = yield_nonce_and_hash()
+    chain = yield_block()
     for _ in range(10):
         block_chain = mine_the_next_block(chain)
     block_chain = list(block_chain)

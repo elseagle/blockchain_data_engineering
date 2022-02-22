@@ -44,14 +44,7 @@ def generate_nonce(length: int, length_of_prefix: int):
     # the block logic below is create a random length...
     # ...that will be enough to get really random combination
     randomizer = 5 * length
-    if length % 3 == 1:
-        randomizer += 2
-    elif length % 9 == 1:
-        randomizer += random.randint(1, 7)
-    elif length % 5 == 0:
-        randomizer += random.randint(3, 9)
-    elif length % 7 == 2:
-        randomizer += random.randint(10, 19)
+
 
     # Use the random length to slice the encoded string and decode
     output = string_[0:randomizer].decode()
@@ -78,9 +71,8 @@ def find_hash(text: str, length_of_prefix: int = 4):
 
 
 if __name__ == "__main__":
-    start = timer()
     word = input("Kindly input word: ")
-
+    start = timer()
     while True:
         # word below can be any string,
         prefix = "0000"
@@ -90,8 +82,6 @@ if __name__ == "__main__":
             print("SHA256:", x[0])
             print()
             print("NONCE:", x[1])
-            print()
-            print("LENGTH OF NONCE:", x[2])
             print()
             start = timer()
             break
