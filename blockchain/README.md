@@ -2,11 +2,13 @@
 
 ## About
 This section is divided into 5, where each section matches with given descriptions in the given exercise. The following are solution to the exerises according to their numbering:
-1. Nonce Generator
-2. Blockchain Generator
-3. Multithreading
-4. Thread Communication
-5. Decentralized Blockchain
+- [Decentralized Blockchain](#decentralized-blockchain)
+  - [About](#about)
+  - [Nonce Generator (nonce_generator.py)](#nonce-generator-nonce_generatorpy)
+  - [Blockchain Generator (blockchain_generator.py)](#blockchain-generator-blockchain_generatorpy)
+  - [Multithreading (multithreading_generator.py)](#multithreading-multithreading_generatorpy)
+  - [Thread Communication (thread_communication.py)](#thread-communication-thread_communicationpy)
+  - [Decentralized (decentralized.py)](#decentralized-decentralizedpy)
 
 
 ## Nonce Generator (nonce_generator.py)
