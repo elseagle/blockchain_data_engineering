@@ -13,11 +13,16 @@
 
 <!-- MarkdownTOC -->
 
-- [Overview](#Overview)
-- [Objectives](#Objectives)
-- [Prerequisites](#Prerequisites)
-- [Quickstart](#Quickstart)
-- [Reasons for choosing websites toolkits and storage](#Reasons-for-choosing-websites-toolkits-and-storage)
+- [Platform Scraping](#platform-scraping)
+    - [It allows you to do the following:](#it-allows-you-to-do-the-following)
+- [Overview](#overview)
+  - [Built With](#built-with)
+- [Objectives](#objectives)
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+  - [Get started for coingecko](#get-started-for-coingecko)
+  - [Get started for rarity.tools](#get-started-for-raritytools)
+- [Reasons for choosing Websites, toolkits and storage](#reasons-for-choosing-websites-toolkits-and-storage)
 
 
 <!-- /MarkdownTOC -->
@@ -120,7 +125,7 @@ This project scrapes both [coingecko](https://www.coingecko.com/) and [rarity.to
     * SET PROXY_URL to http proxy gotten from servies such as [geosurf](https://www.geosurf.com/) or [brightdata](https://brightdata.com/). This sub-step is not necessary but it is useful because it helps to prevent your IP getting blocked, This happens when a single IP makes multiple requests to the same site in a very short period of time. A protected website might interpret this as a DDOS attack and blacklist the IP address. Using a proxy server helps to avoid this.
 
 
-    * Set PROJECT_DIRECTORY to the path that the project folder is saved in. e.g C:/Users/Desktop/blockchain_data_engineering
+    * Set PROJECT_DIRECTORY to the path that the project folder is saved in. e.g /Users/Desktop/blockchain_data_engineering
 
 
 # Quickstart

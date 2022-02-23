@@ -45,7 +45,6 @@ def generate_nonce(length: int, length_of_prefix: int):
     # ...that will be enough to get really random combination
     randomizer = 5 * length
 
-
     # Use the random length to slice the encoded string and decode
     output = string_[0:randomizer].decode()
 

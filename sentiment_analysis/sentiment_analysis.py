@@ -2,6 +2,7 @@ import os
 import re
 import time
 import traceback
+from pprint import pp
 
 import nltk
 import tweepy
@@ -174,4 +175,4 @@ if __name__ == "__main__":
     print()
     print()
     USER_HANDLE = os.getenv("USER_HANDLE")
-    print(main(filter_word="crypto", user_handle=USER_HANDLE))
+    pp(main(filter_word="crypto", user_handle=USER_HANDLE))
