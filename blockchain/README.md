@@ -1,7 +1,7 @@
 # Decentralized Blockchain
 
 ## About
-This section is divided into 5, where each section matches with given descriptions in the given exercise. The following are solution to the exerises according to numbering:
+This section is divided into 5, where each section matches with given descriptions in the given exercise. The following are solution to the exerises according to their numbering:
 1. Nonce Generator
 2. Blockchain Generator
 3. Multithreading
