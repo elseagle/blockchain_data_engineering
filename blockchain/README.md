@@ -150,3 +150,23 @@ Sample Output:
     {'nonce': 'vriu06pJWLOj8j4XsU0PNH1iMkl2bpsbTk=', 'miner': '6'},
     {'nonce': 'HguXWo4lB26yADEh0pStYrNT1CMDOtIJBdt', 'miner': '1'},
     {'nonce': 'VYmEmKSV0DhMSFZgXavY9qRgswLmJRkU5tN', 'miner': '2'}]
+
+
+More Questions:
+1. Does this blockchain scale? What happens when the number of threads go up?
+
+Ans: No, it does not scale, the more the threads the more the queues needed.
+
+2. If one thread stopped working, does it affect the blockchain? What if the thread comes back on later?
+
+Ans: No, it doesn’t affect the chain. If it comes back later, it will pick up the latest chain via the listen_to_updates function.
+
+3. What if we require the SHA256 hashes to start with more zeros?
+
+Ans: It would take a longer time 
+
+4. Is it easy for a “malicious thread” to modify the miner fields in the chain?
+
+Ans: No, because the nonce is gotten from the combination of the last hash[ which container previous miner records].
+
+
