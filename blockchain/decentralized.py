@@ -7,27 +7,7 @@ from timeit import default_timer as timer
 from blockchain_generator import verify_chain, find_hash
 
 
-def main(counter: int, miner, last_hash: str = "", prefix="0000"):
-    """Generates hash based on last hash
 
-    Parameters:
-        counter: increments on every block
-        miner: current block's miner
-        last_hash: hash from last block mine
-        prefix: the zero prefix
-    """
-    if last_hash:
-        x = find_hash(
-            length_of_prefix=len(prefix),
-            counter_=counter,
-            miner=miner,
-            last_hash=last_hash,
-        )
-    else:
-        x = find_hash(
-            length_of_prefix=len(prefix), counter_=counter, last_hash="", miner=miner
-        )
-    return x
 
 
 class MyThread(threading.Thread):
@@ -41,6 +21,29 @@ class MyThread(threading.Thread):
         self.prefix = "0000"
         self.blocks = []
 
+    @staticmethod
+    def main(counter: int, miner, last_hash: str = "", prefix="0000"):
+        """Generates hash based on last hash
+
+        Parameters:
+            counter: increments on every block
+            miner: current block's miner
+            last_hash: hash from last block mine
+            prefix: the zero prefix
+        """
+        if last_hash:
+            x = find_hash(
+                length_of_prefix=len(prefix),
+                counter_=counter,
+                miner=miner,
+                last_hash=last_hash,
+            )
+        else:
+            x = find_hash(
+                length_of_prefix=len(prefix), counter_=counter, last_hash="", miner=miner
+            )
+        return x
+    
     def validate_and_save_new_chain(self, latest_block):
         temp_blockchain = self.blocks.copy()
         temp_blockchain.append(latest_block)
@@ -50,12 +53,13 @@ class MyThread(threading.Thread):
             self.last_hash = latest_block["last_hash"]
         del temp_blockchain
         return is_valid
+    
 
     def mine_block(self, name):
         if len(self.blocks) > (self.counter - 1):
             self.counter += 1
             return
-        x = main(
+        x = self.main(
             counter=self.counter,
             miner=f"{str(name)}",
             last_hash=self.last_hash,
@@ -76,7 +80,7 @@ class MyThread(threading.Thread):
             self.validate_and_save_new_chain(new_block)
 
             global queue_list
-            event.clear()
+            # event.clear()
             for q in queue_list:
                 q.put(self.blocks)
 
@@ -89,20 +93,6 @@ class MyThread(threading.Thread):
                 print("DONE")
                 self.queue.queue.clear()
                 self.queue.task_done()
-            event.set()
-
-    def run(self):
-        name = threading.currentThread().getName()
-
-        print(
-            name,
-            "Starting initial mine...",
-        )
-        event.set()
-        while len(self.blocks) < 10:
-            self.mine_block(name=self.miner)
-
-            self.listen_to_updates()
 
     def listen_to_updates(self):
         if not self.queue.empty():
@@ -117,6 +107,20 @@ class MyThread(threading.Thread):
                         pass
 
 
+    def run(self):
+        name = threading.currentThread().getName()
+
+        print(
+            name,
+            "Starting initial mine...",
+        )
+        # event.set()
+        while len(self.blocks) < 10:
+            self.mine_block(name=self.miner)
+
+            self.listen_to_updates()
+
+   
 if __name__ == "__main__":
     threads = []
     sample_word_list = []
@@ -129,7 +133,6 @@ if __name__ == "__main__":
     blocks = []
     queue_list = []
 
-    event = threading.Event()
     for t in range(number_of_threads_expected):
         q = Queue()
         queue_list.append(q)
