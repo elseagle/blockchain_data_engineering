@@ -1,16 +1,5 @@
 # Platform Scraping
 
-
-### It allows you to do the following:
-
-- [x] Scrape coingecko for cryptocurrencies based on market cap rank and rarity.tools for Upcoming NFT sales.
-
-- [x] Extract and save data to a postgresql database.
-
-- [x] Functions that automate downloading for different topics/search queries.
-
-- [x] Save extracted data to a csv file.
-
 <!-- MarkdownTOC -->
 
 - [Platform Scraping](#platform-scraping)
@@ -26,6 +15,19 @@
 
 
 <!-- /MarkdownTOC -->
+
+
+### It allows you to do the following:
+
+- [x] Scrape coingecko for cryptocurrencies based on market cap rank and rarity.tools for Upcoming NFT sales.
+
+- [x] Extract and save data to a postgresql database.
+
+- [x] Functions that automate downloading for different topics/search queries.
+
+- [x] Save extracted data to a csv file.
+
+
 
 
 # Overview
