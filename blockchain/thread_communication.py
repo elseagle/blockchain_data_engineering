@@ -17,6 +17,7 @@ class MyThread(threading.Thread):
         self.expected_messages = args[1]
 
     def run(self):
+        
         print(
             threading.currentThread().getName(),
             "Sending message:",

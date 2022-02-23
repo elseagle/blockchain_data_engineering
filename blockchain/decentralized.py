@@ -43,6 +43,13 @@ class MyThread(threading.Thread):
         return x
 
     def validate_and_save_new_chain(self, latest_block):
+        """ Verifies the current block if it is sync with
+            previous blocks before sving it
+
+        Parameters
+        ----------
+        latest_block: this is the block to be verified before adding to the chain
+        """
         temp_blockchain = self.blocks.copy()
         temp_blockchain.append(latest_block)
         is_valid = verify_chain(temp_blockchain)
@@ -53,6 +60,13 @@ class MyThread(threading.Thread):
         return is_valid
 
     def mine_block(self, name):
+        """Mines next block and sends mined block to 
+           queues of each thread
+
+        Parameters
+        ----------
+        name: the current thread
+        """
         if len(self.blocks) > (self.counter - 1):
             self.counter += 1
             return
@@ -91,6 +105,10 @@ class MyThread(threading.Thread):
                 self.queue.task_done()
 
     def listen_to_updates(self):
+        """Listens to queue to get latest block 
+        Parameters
+        ----------
+        """
         if not self.queue.empty():
             tracking_chain = self.queue.get()
             if len(tracking_chain) > len(self.blocks):
@@ -103,6 +121,11 @@ class MyThread(threading.Thread):
                         pass
 
     def run(self):
+        """Mines blocks and listens to queue for chain updates
+
+        Parameters
+        ----------
+        """
         name = threading.currentThread().getName()
 
         print(
