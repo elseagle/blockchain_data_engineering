@@ -173,8 +173,8 @@ This project scrapes both [coingecko](https://www.coingecko.com/) and [rarity.to
 
 - Asyncio with aiohttp is being used to make multiple requests asynchronously to the url of each of the cryptocurrencies e.g. https://www.coingecko.com/en/coins/bitcoin. so as to get the extra information not listed on the homepage.
 
-- For scraping rarity.tools it uses requests to get the json response because after inspecting the network panel in dev tools, the request that the web browser makes to rarity.tools api was found.
-
+- For scraping rarity.tools it uses requests to get the json response because after inspecting the network panel in dev tools, the request that the web browser makes to rarity.tools api is mimicked via the scripts in this project. Since this is faster and more structured since it mimicks the actual requests and responses that lists the nfts on the platform. 
+  
 - Postgresql was chosen because it helps developers build applications, administrators to protect data integrity and also helps data analyst and data scientist to manage their data irregardless of the size of the dataset.
 
 
