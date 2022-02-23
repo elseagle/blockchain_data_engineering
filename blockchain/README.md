@@ -76,3 +76,77 @@ Sample Output:
 
   
 ## Thread Communication (thread_communication.py)
+In this script, multiple threads are able to communicate with each other i.e send and recieve messages. MyThread is the class used which makes use of the the threading inbuilt class. The major means of communication in this script is done using Queues. Mythread class has two main functions:
+  
+1. run
+   
+   This is the initial function that kicks off once the thread is initiated. It is the sender function. It sends the message.
+
+2. receive_message
+   
+   This function via the queue allows each thread receive a message and log it to the console. A lock is used to ensure the thread prints its received message before exiting.
+
+Sample Output:
+
+    Thread-1 Sending message: sqkg
+    Thread-2 Sending message: h7p2
+    Thread-3 Sending message: YnTq
+    Thread-4 Sending message: 7Bxr
+    Thread-5 Sending message: z6lV
+    Thread-1 Received message:h7p2
+    Thread-2 Received message:sqkg
+    Thread-2 Received message:YnTq
+    Thread-2 Received message:7Bxr
+    Thread-4 Received message:sqkg
+    Thread-4 Received message:h7p2
+    Thread-4 Received message:YnTq
+    Thread-4 Received message:z6lV
+    Thread-5 Received message:sqkg
+    Thread-3 Received message:sqkg
+    Thread-3 Received message:h7p2
+    Thread-1 Received message:YnTq
+    Thread-1 Received message:7Bxr
+    Thread-1 Received message:z6lV
+    Thread-2 Received message:z6lV
+    Thread-3 Received message:7Bxr
+    Thread-5 Received message:h7p2
+    Thread-5 Received message:YnTq
+    Thread-5 Received message:7Bxr
+    Thread-3 Received message:z6lV
+
+## Decentralized (decentralized.py)
+
+This script uses almost same structure to the thread communication script, in terms of MyThread class and communication via queues. There are five main methods in this script:
+
+1. mine_block
+   
+   This method creates the nth-block by a thread in the chain. Once the block is created, it is broadcasted to all other threads via their individual queues.
+
+2. listen_to_updates
+   
+   This method listens to the queue to check if there is a new block, if a new block exists, the thread updates its own chain else it continues to mine.
+
+3. validate_and_save_new_chain
+   
+   This method verifies the current chain passed in and saves the chain if the verification is successful.
+
+4. run
+   
+   This function has the main logic to continuously mine and listen until the expected number of blocks (10) have been mined in the chain
+
+5. main
+   
+   This function run the main logic of finding the hash when a new block is to be mined.
+
+Sample Output:
+
+    [{'nonce': '2sp9P0bTbrxlhk867lha3EI3xV6lIkFFxtoWk7O6kjuyfZGiMOiZtUDcoxC39Ut9K400JRIGPWQQDJPmCfozKFa1NNam2aTAmpN','miner': '1'},
+    {'nonce': 'eOGwCLTxrcwwB6VXRYCTi0fBpy8Lmw90fK0', 'miner': '2'},
+    {'nonce': 'wmKNt1lbXLiSmLxDHXzlQvuxIvXoP5FvBUP', 'miner': '2'},
+    {'nonce': 'FSfLwVtMW9ZjwYMI1fQHP1Ht81JTXUivAMK', 'miner': '5'},
+    {'nonce': '7U4ipXSaHlUiFtMmgiOBQ3NLcROdLxu0cQ=', 'miner': '3'},
+    {'nonce': 'eBnxxUaqeqDED0VY9a9xD54EOycKdrJKRf4', 'miner': '6'},
+    {'nonce': 'Xf6n34CME7B2kEdz0sNNIWdC7HmdpcKywkM', 'miner': '3'},
+    {'nonce': 'vriu06pJWLOj8j4XsU0PNH1iMkl2bpsbTk=', 'miner': '6'},
+    {'nonce': 'HguXWo4lB26yADEh0pStYrNT1CMDOtIJBdt', 'miner': '1'},
+    {'nonce': 'VYmEmKSV0DhMSFZgXavY9qRgswLmJRkU5tN', 'miner': '2'}]
