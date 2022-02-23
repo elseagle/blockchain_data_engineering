@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.7-slim-buster
+FROM python:3.8-slim-buster
 
 RUN apt-get update && apt-get install
 RUN apt-get install -y libpq-dev
