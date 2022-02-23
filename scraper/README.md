@@ -148,6 +148,10 @@ This project scrapes both [coingecko](https://www.coingecko.com/) and [rarity.to
         $ python3 scraper/coingecko/search/upload_new_data.py
      ```
 
+4. The notebook can be found in coingecko.ipnyb
+   
+
+
 ## Get started for rarity.tools
 
 1. Open a terminal and navigate to the directory of the cloned repository.
@@ -163,6 +167,8 @@ This project scrapes both [coingecko](https://www.coingecko.com/) and [rarity.to
     ```sh
         $ python3 scraper/rarity_tools/upload_new_data.py
      ```
+
+4. The notebook can be found in nft.ipnyb
 
 
 # Reasons for choosing Websites, toolkits and storage
