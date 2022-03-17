@@ -5,10 +5,11 @@ from scraper.utils.creation_utils import insert_item, insert_many, select_many_r
 
 
 def seed_tables(conn, cur, number_of_coins):
+    create_tables(conn, cur)
     currency_details, category_list = get_initial_data(
         number_of_coins
     )  # download web page and save csv too
-    create_tables(conn, cur)
+
     print("uploading initial data")
     insert_many(
         cur,
