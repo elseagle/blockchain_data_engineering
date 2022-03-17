@@ -87,11 +87,12 @@ def convert_to_tuple(upcoming_nft_sale):
 
 
 def seed_table(conn, cur):
+    create_table(conn, cur)
     upcoming_nft_sales = get_initial_data()
     if len(upcoming_nft_sales) <= 0:
         print("there is no valid upcoming nft")
         return
-    create_table(conn, cur)
+
     upcoming_nft_list = []
     for upcoming_nft_sale in upcoming_nft_sales:
         upcoming_nft_list.append(convert_to_tuple(upcoming_nft_sale))
