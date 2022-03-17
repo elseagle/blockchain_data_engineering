@@ -38,12 +38,15 @@ class MyThread(threading.Thread):
             )
         else:
             x = find_hash(
-                length_of_prefix=len(prefix), counter_=counter, last_hash="", miner=miner
+                length_of_prefix=len(prefix),
+                counter_=counter,
+                last_hash="",
+                miner=miner,
             )
         return x
 
     def validate_and_save_new_chain(self, latest_block):
-        """ Verifies the current block if it is sync with
+        """Verifies the current block if it is sync with
             previous blocks before sving it
 
         Parameters
@@ -53,14 +56,15 @@ class MyThread(threading.Thread):
         temp_blockchain = self.blocks.copy()
         temp_blockchain.append(latest_block)
         is_valid = verify_chain(temp_blockchain)
+        del temp_blockchain
+
         if is_valid:
             self.blocks.append(latest_block)
             self.last_hash = latest_block["last_hash"]
-        del temp_blockchain
-        return is_valid
+            return is_valid
 
     def mine_block(self, name):
-        """Mines next block and sends mined block to 
+        """Mines next block and sends mined block to
            queues of each thread
 
         Parameters
@@ -88,24 +92,24 @@ class MyThread(threading.Thread):
                 "last_hash": last_hash,
                 "counter": self.counter,
             }
-            self.validate_and_save_new_chain(new_block)
+            is_valid = self.validate_and_save_new_chain(new_block)
+            if is_valid:
+                global queue_list
+                for q in queue_list:
+                    q.put(self.blocks)
 
-            global queue_list
-            for q in queue_list:
-                q.put(self.blocks)
-
-            if len(self.blocks) == 10:
-                for block in self.blocks:
-                    del block["counter"]
-                    del block["last_hash"]
-                pp(self.blocks)
-                verify_chain(self.blocks, self.prefix)
-                print("DONE")
-                self.queue.queue.clear()
-                self.queue.task_done()
+                if len(self.blocks) == 10:
+                    for block in self.blocks:
+                        del block["counter"]
+                        del block["last_hash"]
+                    pp(self.blocks)
+                    verify_chain(self.blocks, self.prefix)
+                    print("DONE")
+                    self.queue.queue.clear()
+                    self.queue.task_done()
 
     def listen_to_updates(self):
-        """Listens to queue to get latest block 
+        """Listens to queue to get latest block
         Parameters
         ----------
         """
@@ -157,8 +161,7 @@ if __name__ == "__main__":
 
         # index on range starts but threads start from 1
         miner = t + 1
-        threads.append(
-            MyThread(q, args=(counter, miner, last_hash, prefix)))
+        threads.append(MyThread(q, args=(counter, miner, last_hash, prefix)))
         threads[t].start()
         time.sleep(0.1)
 

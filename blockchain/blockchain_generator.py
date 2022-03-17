@@ -24,7 +24,8 @@ def find_hash(
         sha256 = hash_string(to_string(miner) + nonce)
     else:
         nonce = generate_nonce(
-            (100 - len(str(miner)) - len(last_hash)), length_of_prefix)
+            (100 - len(str(miner)) - len(last_hash)), length_of_prefix
+        )
         sha256 = hash_string(last_hash + to_string(miner) + nonce)
     return sha256, nonce, len(nonce), miner, last_hash
 
@@ -46,9 +47,7 @@ def yield_block():
                 last_hash=last_hash,
             )
         else:
-            x = find_hash(
-                length_of_prefix=len(prefix), counter_=counter, last_hash=""
-            )
+            x = find_hash(length_of_prefix=len(prefix), counter_=counter, last_hash="")
         if x[0].startswith(prefix):
             counter += 1
             if len(blocks) == 10:

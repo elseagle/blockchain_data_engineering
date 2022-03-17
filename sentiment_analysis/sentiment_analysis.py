@@ -15,8 +15,7 @@ load_dotenv()
 
 
 def get_config():
-    """Get the credentials and configs needed to initialize the tweepy API
-    """
+    """Get the credentials and configs needed to initialize the tweepy API"""
     try:
         CONSUMER_KEY = os.getenv("CONSUMER_KEY")
         CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
@@ -37,15 +36,17 @@ def get_config():
 
 
 def remove_emoji(text):
-    """Remove emojis and symbols
-    """
-    regrex_pattern = re.compile(pattern="["
-                                u"\U0001F600-\U0001F64F"  # emoticons
-                                u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-                                u"\U0001F680-\U0001F6FF"  # transport & map symbols
-                                u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                                "]+", flags=re.UNICODE)
-    return regrex_pattern.sub(r'', text)
+    """Remove emojis and symbols"""
+    regrex_pattern = re.compile(
+        pattern="["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport & map symbols
+        "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        "]+",
+        flags=re.UNICODE,
+    )
+    return regrex_pattern.sub(r"", text)
 
 
 def clean_texts(text):
@@ -57,15 +58,15 @@ def clean_texts(text):
     """
     # remove urls
     text = re.sub(r"http\S+", "", text)
-    text = re.sub(
-        "(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|(RT)", " ", text)
+    text = re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|(RT)", " ", text)
 
     text = remove_emoji(text)
 
     tokens = word_tokenize(text)
     stp_wrd = stopwords.words("english")
-    stp_wrd.extend(["join", "di", "io", "thing", "sa",
-                   "co", "ph", "us", "rt", "it's", "it"])
+    stp_wrd.extend(
+        ["join", "di", "io", "thing", "sa", "co", "ph", "us", "rt", "it's", "it"]
+    )
 
     token_list = [token for token in tokens if token not in stp_wrd]
     return token_list
@@ -111,7 +112,7 @@ def get_sentiment(filtered_tweets):
 
     Parameters
     ----------
-    filtered_tweets: all tweets retrieved 
+    filtered_tweets: all tweets retrieved
     """
     sentiments = []
     for tweet_ in filtered_tweets:
@@ -139,7 +140,7 @@ def get_sentiment(filtered_tweets):
 
 
 def main(user_handle, filter_word=""):
-    """ Runs main logic for sentiment_analysis flow
+    """Runs main logic for sentiment_analysis flow
 
     Parameters
     ----------
@@ -168,9 +169,9 @@ def main(user_handle, filter_word=""):
 
 
 if __name__ == "__main__":
-    nltk.download('stopwords')
-    nltk.download('punkt')
-    nltk.download('webtext')
+    nltk.download("stopwords")
+    nltk.download("punkt")
+    nltk.download("webtext")
     time.sleep(2)
     print()
     print()

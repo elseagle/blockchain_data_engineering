@@ -18,9 +18,9 @@ def get_initial_data(number_of_coins=120):
         print("PROJECT_DIRECTORY not found in .env")
         exit()
 
-    asyncio.set_event_loop_policy(
-        asyncio.WindowsSelectorEventLoopPolicy()
-    )  # windows only
+    # asyncio.set_event_loop_policy(
+    #     # asyncio.WindowsSelectorEventLoopPolicy()
+    # )  # windows only
 
     proxy = PROXY_URL
     start = time.time()

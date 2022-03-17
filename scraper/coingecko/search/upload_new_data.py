@@ -1,10 +1,12 @@
 import random
 import requests
-from utils.connect_db import connect
-from utils.creation_utils import insert_item, insert_many, select_many_records
+# from utils.connect_db import connect
+# from utils.creation_utils import insert_item, insert_many, select_many_records
 from get_coingecko_data import get_category_data, get_coin_data
 from scraper.coingecko.currencies_and_categories.categories import categories
 from scraper.coingecko.currencies_and_categories.currencies import currencies
+from scraper.utils.connect_db import connect
+from scraper.utils.creation_utils import insert_item, insert_many, select_many_records
 
 
 def process_currency_details(currency_details):

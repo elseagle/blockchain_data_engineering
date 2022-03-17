@@ -17,7 +17,7 @@ class MyThread(threading.Thread):
         self.expected_messages = args[1]
 
     def run(self):
-        
+
         print(
             threading.currentThread().getName(),
             "Sending message:",
@@ -54,8 +54,7 @@ if __name__ == "__main__":
         sample_word = generateRandomAlphaNumericString(4)
 
         sample_word_list.append(sample_word)
-        threads.append(
-            MyThread(q, args=(sample_word, number_of_messages_per_thread)))
+        threads.append(MyThread(q, args=(sample_word, number_of_messages_per_thread)))
         threads[t].start()
         time.sleep(0.1)
 

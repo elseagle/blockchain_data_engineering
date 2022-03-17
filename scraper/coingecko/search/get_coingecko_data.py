@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from scraper.coingecko.async_get_coin_info import get_coins
 
 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())  # windows only
+# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())  # windows only
 
 
 def get_coin_data(currency_name, coin_gecko_url):
